@@ -69,18 +69,26 @@ CREATE TABLE name (
 - Go back to the SQL Query
 
 ### INSERT
-Add a new row to the database. Only fields marked as NOT NULL are required.
+Add a new row to the database. Only fields marked as NOT NULL are required. Column names are entered using `""` and values are entered with `''`.
 
 ```
-INSERT INTO "songs" ("id", "number", "track", "artist", "published") 
+INSERT INTO "songs" ("id", "rank", "track", "artist", "published") 
 VALUES (1, 357, 'Wonderwall', 'Oasis', '1-1-1996');
 ```
 - What went wrong? **Our id must be unique.**
-- Let's try that again (auto increment)
+- Let's try that again without an **id** (it will auto increment)
 
 ```
-INSERT INTO "songs" ("number", "track", "artist", "published") 
+INSERT INTO "songs" ("rank", "track", "artist", "published") 
 VALUES (357, 'Wonderwall', 'Oasis', '1-1-1996');
+```
+
+- INSERT multiple records
+
+```
+INSERT INTO "songs" ("rank", "track", "artist", "published") 
+VALUES (357, 'Wonderwall', 'Oasis', '1-1-1996'),
+(102, 'Under the Bridge', 'Red Hot Chili Peppers', '1-1-1992');
 ```
 
 - `cmd-r` to refresh, our song exists!
@@ -109,6 +117,9 @@ WHERE "id" = 1;
 SELECT "track", "artist" FROM "songs" 
 WHERE "track" LIKE '%Fire%' LIMIT 10;
 
+/* SELECT all columns
+SELECT * FROM "songs" WHERE "track" ILIKE '%fire%';
+
 SELECT "track", "artist", "published" FROM "songs" 
 WHERE "published" > '1/1/2016' LIMIT 10;
 
@@ -121,17 +132,21 @@ ORDER BY "published" DESC LIMIT 20;
 SELECT COUNT(*) FROM "songs"
 WHERE LOWER("track") LIKE '%fire%';
 
-/* WHERE conditions can be joined with AND, OR & NOT */
+/* 
+WHERE conditions can be joined with AND, OR & NOT 
+SELECT all columns from songs where the artist has an 'a' in the name AND was published after 1/1/2000 OR track has fire in the name.
+*/
 SELECT * FROM "songs"
 WHERE ("artist" LIKE '%a%' AND "published" > '1/1/2000')
-OR LOWER("track") LIKE '%phire%';
+OR "track" ILIKE '%fire%';
 
-/* In summary */
-SELECT expressions
-FROM tables
+/* In summary 
+SELECT column
+FROM table
 [WHERE conditions]
-[ORDER BY expression [ ASC | DESC ]]
+[ORDER BY column [ ASC | DESC ]]
 LIMIT number_rows [ OFFSET offset_value ];
+*/
 ```
 
 ### UPDATE
@@ -140,6 +155,10 @@ Updates an existing record.
 `UPDATE "songs" SET "artist"='Chris Black' WHERE id = 1;`
 
 **DON'T FORGET THE WHERE**
+
+Update Wonderwall to rank #1
+
+`UPDATE "songs" SET "rank"=1 WHERE "track" = 'Wonderwall';`
 
 
 Replace `Fire` with `Phire`
@@ -157,6 +176,8 @@ WHERE "track" LIKE '%Fire%';
 SELECT * FROM "songs"
 WHERE "track" LIKE '%Phire%';
 ```
+Only use REPLACE when replacing substrings. If replacing the whole value, `SET column = value WHERE condition` is sufficient.
+
 
 ### DELETE
 Deletes an existing record.
