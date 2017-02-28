@@ -137,13 +137,10 @@ LIMIT number_rows [ OFFSET offset_value ];
 ### UPDATE
 Updates an existing record.
 
-`UPDATE "songs" SET artist='Chris Black'`;
+`UPDATE "songs" SET "artist"='Chris Black' WHERE id = 1;`
 
-Look OK?
+**DON'T FORGET THE WHERE**
 
-`DELETE FROM "songs";`
-
-I'm on a roll. (restore the data)
 
 Replace `Fire` with `Phire`
 
@@ -165,6 +162,11 @@ WHERE "track" LIKE '%Phire%';
 Deletes an existing record.
 
 ```
+/* Test before DELETE */
+SELECT * FROM "songs" WHERE "artist" LIKE 'Kanye West';
+/* Actually DELETE */
+DELETE FROM "songs" WHERE "artist" LIKE 'Kanye West';
+
 DELETE FROM table
 [WHERE conditions];
 ```
